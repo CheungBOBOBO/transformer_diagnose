@@ -1,0 +1,124 @@
+﻿/*后台首页样式*/
+
+/*全局*/
+body, * {
+	font: 12px Arial, Verdana, sans-serif;
+	color: #3D6BAC;
+	margin: 0;
+	padding: 0;
+}
+table {
+	width:100%;
+}
+table, tr, td {
+	padding:0;
+	margin:0;
+	border:none;
+}
+#boxTb {
+	width:100%;
+}
+/*顶部*/
+#topTb {
+	background: url(../Images/head.gif) top repeat-x;
+	width:100%;
+	height: 100px;
+}
+.getIndexBtn {
+	display: block;
+	width: 60px;
+	height: 21px;
+	background: url(../Images/button2.gif) 0 0 no-repeat;
+	color: #234F8D;
+	text-align: center;
+	line-height: 22px;
+	text-decoration: none
+}
+.topBj {
+	background: url(../Images/head_bg.gif) 0 0 no-repeat
+}
+.dh {
+	width:100px;
+}
+.dh a {
+	display: block;
+	height: 33px;
+	text-align: center;
+	line-height: 33px;
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+}
+/*中部*/
+#leftTb {
+	background: url(../Images/content.gif) repeat-y;
+	width:172px;
+}
+.menuon {
+	width: 97px;
+	color: #ffffff;
+	background: url(../Images/actived.gif) 0 0 no-repeat;
+	padding-left: 20px;
+}
+.menuoff, #menu a {
+	width: 80px;
+	color: #336699;
+	background: url(../Images/nav_li.gif) right 6px no-repeat;
+}
+.submenutitleon {
+	background: url(../Images/left_menu_title_on.gif) 0 0 no-repeat;
+	text-align: left;
+	vertical-align: bottom;
+}
+.submenutitleon span {
+	line-height: 28px;
+	padding-left: 30px;
+}
+.submenutitleoff {
+	background: url(../Images/left_menu_title_off.gif) 0 0 no-repeat;
+	text-align: left;
+	vertical-align: bottom;
+}
+.submenutitleoff span {
+	line-height: 28px;
+	padding-left: 30px;
+}
+.leftmenuoff, .menu a {
+	display: block;
+	height: 24px;
+	line-height: 24px;
+	background: url(../Images/menus_dd.gif) 15px 8px no-repeat #F4F9FF;
+	padding-left: 26px;
+	width: 146px;
+	text-align: left;
+	border-bottom: 1px solid #D8ECFF;
+	color: #3D6BAC;
+	text-decoration: none;
+}
+.leftmenuoff, .menu a:hover {
+	background: url(../Images/menus_dd.gif) 15px 8px no-repeat #FEFBF7;
+	color: #FF6600;
+	text-decoration: none;
+}
+.leftmenuon {
+	display: block;
+	height: 24px;
+	line-height: 24px;
+	background: url(../Images/menus_dd.gif) 15px 8px no-repeat #FEFBF7;
+	padding-left: 26px;
+	width: 146px;
+	text-align: left;
+	border-bottom: 1px solid #D8ECFF;
+	color: #FF6600;
+	text-decoration: none;
+}
+/*footer*/
+#footerTb {
+	height:10px;
+	background: url(../Images/footer.gif)
+}
+
+#menu a:hover
+{
+    color:Red;
+    }
