@@ -5,6 +5,7 @@ import numpy as np
 from  numpy.linalg.linalg import inv as inv_
 from math import exp as exp_
 from math import log as log_
+from smop.runtime import *
 
 lower_data=np.ndarray(  shape=(13,1),
                         buffer=np.array([10,0,0,0,20,1,0.5,0,1,0,0,10000,0.1]),
@@ -13,25 +14,6 @@ lower_data=np.ndarray(  shape=(13,1),
 upper_data=np.ndarray(  shape=(13,1),
                         buffer=np.array([150,5,400,4500,150,1.3,0.8,4,2,35,25,20000,0.3]),
                         dtype=float,)
-def caculate_s_item_1(input_item,lower,upper):
-    if input_item < lower :
-        return 0
-    elif input_item > upper:
-        return 1
-    else:
-        return (upper-input_item)/(upper-lower)
-    
-def caculate_s_item_2(input_item,lower,upper):
-    if input_item < upper:
-        return (upper-input_item)/(upper-lower)
-    else:
-        return 0
-    
-def caculate_s_item_3(input_item,lower,upper):
-    if input_item < upper:
-        return (upper-input_item)/(upper-lower)
-    else:
-        return 0
 
 def scorefunction(Input_data,nargout=1):
     #Input_data=xlsread_('datawithoutbias.xlsx','C2:C20')
@@ -154,6 +136,11 @@ def scorefunction(Input_data,nargout=1):
             s[12]=0
     s[13]=Input_data[13] / 100
     s[14]=Input_data[14] / 100
+    t1=[None]*15
+    t2=[None]*15
+    t3=[None]*15
+    t4=[None]*15
+    t5=[None]*15
     for i in range(0,15):
         if s[i] < 0.2:
             t1[i]=0
@@ -199,18 +186,22 @@ def scorefunction(Input_data,nargout=1):
     #S2=matlabarray([t1[6],t2[6],t3[6],t4[6],t5[6],t1[7],t2[7],t3[7],t4[7],t5[7],t1[8],t2[8],t3[8],t4[8],t5[8],t1[9],t2[9],t3[9],t4[9],t5[9],t1[10],t2[10],t3[10],t4[10],t5[10],t1[11],t2[11],t3[11],t4[11],t5[11],t1[12],t2[12],t3[12],t4[12],t5[12],t1[13],t2[13],t3[13],t4[13],t5[13]])
     #S3=matlabarray([t1[14],t2[14],t3[14],t4[14],t5[14],t1[15],t2[15],t3[15],t4[15],t5[15]])
     t_list = [t1,t2,t3,t4,t5]
-    S1=matlabarray([item[0] for item in t_list ] + [item[1] for item in t_list ] + [item[2] for item in t_list ] + 
-        [item[3] for item in t_list ] + [item[4] for item in t_list ] )
-    S2=matlabarray([item[5] for item in t_list ] + [item[7] for item in t_list ] + [item[8] for item in t_list ] + 
-        [item[9] for item in t_list ] + [item[10] for item in t_list ]   + [item[11] for item in t_list ] + [item[12] for item in t_list ]) 
-    S3=matlabarray([item[13] for item in t_list ] + [item[14] for item in t_list ]) 
+    '''S1=np.matrix([[item[0] for item in t_list ] , 
+        [item[1] for item in t_list ],
+        [item[2] for item in t_list ],
+        [item[3] for item in t_list ],
+        [item[4] for item in t_list ]] )
+    '''
+    S1=np.matrix([[item[x] for item in t_list ] for x in range(0,5)]) 
+    S2=np.matrix([[item[x] for item in t_list ] for x in range(5,13)]) 
+    S3=np.matrix([[item[x] for item in t_list ] for x in range(13,15)]) 
     
     a1=0.165
     a2=0.24
     a3=0.19
     a4=0.165
     a5=0.24
-    A=matlabarray([a1,a2,a3,a4,a5])
+    A=np.matrix([a1,a2,a3,a4,a5])
     b1=0.1036
     b2=0.1321
     b3=0.1321
@@ -219,23 +210,22 @@ def scorefunction(Input_data,nargout=1):
     b6=0.1321
     b7=0.1179
     b8=0.1036
-    B=matlabarray([b1,b2,b3,b4,b5,b6,b7,b8])
+    B=np.matrix([b1,b2,b3,b4,b5,b6,b7,b8])
     c1=0.55
     c2=0.45
-    C=matlabarray([c1,c2])
+    C=np.matrix([c1,c2])
     e1=0.4
     e2=0.35
     e3=0.25
-    E=matlabarray([e1,e2,e3])
+    E=np.matrix([e1,e2,e3])
     R1=A * S1
     R2=B * S2
     R3=C * S3
-    S5=matlabarray([R1,R2,R3])
-    S5
+    S5=np.matrix([R1.tolist()[0],R2.tolist()[0],R3.tolist()[0]])
     R5=E * S5
-    R5
-    G=matlabarray([93,73,50.5,30.5,10])
-    I=R5 * G
+    print 'R5=',R5
+    G=np.matrix([93.,73.,50.5,30.5,10.])
+    I=R5 * G.T
     if I < 21:
         H=0
     else:
@@ -257,3 +247,6 @@ def scorefunction(Input_data,nargout=1):
 
 if __name__ == '__main__':
     print  'caculate without bias' 
+    input_data=[4.,0.,590.,1125.,12.,2.,0.445,0.1,1.344,42.,12.,21000.,0.0113,95.,95.]
+    scorefunction(input_data)
+
