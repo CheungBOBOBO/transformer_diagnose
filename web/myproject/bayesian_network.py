@@ -2,32 +2,58 @@
 # /usr/local/bin/smop -o ../../web/myproject/bayesian_network.py bayesian.m
 from __future__ import division
 import numpy as np
-from runtime import *
-def bayesian_(,nargout=1):
-    Input_data1=xlsread_('resultwithoutbias.xlsx','H2:H4')
-    H1=Input_data1[1]
-    H2=Input_data1[2]
-    H3=Input_data1[3]
-    m=125 - (25 * H1 + 5 * H2 + H3)
-    Input_data2=xlsread_('sample.xlsx','E3:I127')
+from smop.runtime import *
+from lxml import etree
+from  numpy.linalg.linalg import inv as inv_
+from math import exp as exp_
+from math import log as log_
+from openpyxl import load_workbook
+
+M=None
+def load_traing_data():
+    global M
+    wb = load_workbook(filename = r'training_data.xlsx')    
+    sheet_data = wb['Sheet1']
+    training_data_rows = sheet_data.range('E3:I127')
     M=zeros_(125,5)
-    for i in range_(1,125):
-        for j in range_(1,5):
-            M[i,j]=Input_data2[i,j]
-    Sa=(1 + M[m,1]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
-    Sa
-    Sb=(1 + M[m,2]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
-    Sb
-    Sc=(1 + M[m,3]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
-    Sc
-    Sd=(1 + M[m,4]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
-    Sd
-    Se=(1 + M[m,5]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
-    Se
-    A=matlabarray([Sa,Sb,Sc,Sd,Se])
-    G=matlabarray([93,73,50.5,30.5,10])
+    for i,row in enumerate(training_data_rows):
+        for j,cell in enumerate(row):
+            M[i,j]=cell.value
+
+
+def save_traing_data():
+    #TODO
+    pass
+
+def bayesian_network(Input_data1,nargout=1):
+    #Input_data1=xlsread_('resultwithoutbias.xlsx','H2:H4')
+    H1=Input_data1[0]
+    H2=Input_data1[1]
+    H3=Input_data1[2]
+    m=125 - (25 * H1 + 5 * H2 + H3)
+    m=m-1
+    #Input_data2=xlsread_('sample.xlsx','E3:I127')
+    #M=zeros_(125,5)
+    #for i in range_(1,125):
+    #    for j in range_(1,5):
+    #        M[i,j]=Input_data2[i,j]
+    global M
+    if not M :
+        load_traing_data()
+    #Sa=(1 + M[m,1]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
+    #Sb=(1 + M[m,2]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
+    #Sc=(1 + M[m,3]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
+    #Sd=(1 + M[m,4]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
+    #Se=(1 + M[m,5]) / (1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4] + 1 + M[m,5])
+    #A=matlabarray([Sa,Sb,Sc,Sd,Se])
+    denominator = 1 + M[m,0] + 1 + M[m,1] + 1 + M[m,2] + 1 + M[m,3] + 1 + M[m,4]
+    S_list=[(1 + M[m,x]) / denominator  for x in range(5)]
+    A=np.matrix(S_list)
+
+    G=np.matrix([93,73,50.5,30.5,10]).T
     T_score=A * G
-    T_max=max_(A)
+    T_max=A.max()
+    '''
     a=Sa.copy()
     b=Sb.copy()
     c=Sc.copy()
@@ -46,6 +72,12 @@ def bayesian_(,nargout=1):
                     M[m,4]=M[m,4] + 1
                 else:
                     M[m,5]=M[m,5] + 1
+    '''                
+    for index,Sx in enumerate(S_list):
+        if Sx == T_max :
+            M[m,index]=M[m,index]+1
+            break
+
     if T_score < 21:
         T_Status=0
     else:
@@ -59,13 +91,20 @@ def bayesian_(,nargout=1):
                     T_Status=3
                 else:
                     T_Status=4
-    Input_data2=M.copy()
-    xlswrite_('resultwithoutbias.xlsx',Sa,'sheet1','B5:B5')
-    xlswrite_('resultwithoutbias.xlsx',Sb,'sheet1','C5:C5')
-    xlswrite_('resultwithoutbias.xlsx',Sc,'sheet1','D5:D5')
-    xlswrite_('resultwithoutbias.xlsx',Sd,'sheet1','E5:E5')
-    xlswrite_('resultwithoutbias.xlsx',Se,'sheet1','F5:F5')
-    xlswrite_('resultwithoutbias.xlsx',T_score,'sheet1','G5:G5')
-    xlswrite_('resultwithoutbias.xlsx',T_Status,'sheet1','H5:H5')
-    xlswrite_('sample.xlsx',Input_data2,'sheet1','E3:I127')
-    return R5_(),I_(),H_()
+    #xlswrite_('resultwithoutbias.xlsx',Sa,'sheet1','B5:B5')
+    #xlswrite_('resultwithoutbias.xlsx',Sb,'sheet1','C5:C5')
+    #xlswrite_('resultwithoutbias.xlsx',Sc,'sheet1','D5:D5')
+    #xlswrite_('resultwithoutbias.xlsx',Sd,'sheet1','E5:E5')
+    #xlswrite_('resultwithoutbias.xlsx',Se,'sheet1','F5:F5')
+    #xlswrite_('resultwithoutbias.xlsx',T_score,'sheet1','G5:G5')
+    #xlswrite_('resultwithoutbias.xlsx',T_Status,'sheet1','H5:H5')
+    #xlswrite_('sample.xlsx',Input_data2,'sheet1','E3:I127')
+    print 'S_list=',S_list
+    print 'T_score=',T_score
+    print 'T_Status=',T_Status
+    return 
+
+
+if __name__ == '__main__' :
+    input_data=[3,3,3]
+    bayesian_network(input_data)
