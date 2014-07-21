@@ -10,6 +10,9 @@ from math import exp as exp_
 
 def GMtest(data,a,nargout=1,):
     #Shuju1=xlsread_('data2.xlsx','B2:B12')
+    if len(data)>0 and [data[0]]*len(data)==data :
+        return data[0]
+
     n=len(data)
     Shuju1=np.ndarray(shape=(n , 1),
         buffer=np.array( [ float(value)   for value in data]),
