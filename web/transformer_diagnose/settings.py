@@ -88,6 +88,13 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = '/var/transformer_diagnose/web/transformer_diagnose/static'
 
+
+STATICFILES_DIRS = (
+    '/var/transformer_diagnose/web/transformer_diagnose/static',
+    '/var/extjs_test'
+)
+
+
 TEMPLATE_DIRS = ( 
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
