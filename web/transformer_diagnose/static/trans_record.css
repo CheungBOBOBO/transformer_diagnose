@@ -1,0 +1,16 @@
+body div {
+	width: 600px;
+}
+body div p {
+}
+body div label {
+	width: 120px;
+	display: inline-block;
+	vertical-align: middle;
+}
+body div h2 {
+}
+
+body div input {
+	vertical-align: middle;
+}
