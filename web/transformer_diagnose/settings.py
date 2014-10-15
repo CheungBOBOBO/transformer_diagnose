@@ -102,3 +102,57 @@ TEMPLATE_DIRS = (
     #"/home/caster/webapps/templates",
     "/var/transformer_diagnose/web/myproject/template",
 )
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'simplefile':{
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './diagnose.transformer.com.debug.log',
+            'formatter': 'verbose'
+        },
+        'file':{
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': './diagnose.transformer.com.debug.log',
+            'maxBytes': 10485760, # 10Mb
+            'backupCount': 5,
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'myproject.views': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+    }
+}

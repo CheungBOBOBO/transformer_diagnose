@@ -5,7 +5,19 @@ import numpy as np
 from  numpy.linalg.linalg import inv as inv_
 from math import exp as exp_
 from math import log as log_
-from smop.runtime import *
+#from smop.runtime import zeros_,ones_ 
+import logging
+
+def ones_(*args,**kwargs):
+    return np.matrix(np.ones(args,dtype="int",**kwargs))
+
+def zeros_(*args,**kwargs):
+    if not args:
+        return 0.0 
+    if len(args) == 1:
+        args += args
+    return np.matrix(np.zeros(args,order="F",**kwargs))
+
 
 lower_data=np.ndarray(  shape=(13,1),
                         buffer=np.array([10,0,0,0,20,1,0.5,0,1,0,0,10000,0.1]),
@@ -14,6 +26,8 @@ lower_data=np.ndarray(  shape=(13,1),
 upper_data=np.ndarray(  shape=(13,1),
                         buffer=np.array([150,5,400,4500,150,1.3,0.8,4,2,35,25,20000,0.3]),
                         dtype=float,)
+
+logger = logging.getLogger(__name__)
 
 def scorefunction(Input_data,nargout=1):
     #Input_data=xlsread_('datawithoutbias.xlsx','C2:C20')
@@ -223,7 +237,7 @@ def scorefunction(Input_data,nargout=1):
     R3=C * S3
     S5=np.matrix([R1.tolist()[0],R2.tolist()[0],R3.tolist()[0]])
     R5=E * S5
-    print 'R5=',R5
+    logger.info('R5=',R5)
     G=np.matrix([93.,73.,50.5,30.5,10.])
     I=R5 * G.T
     if I < 21:
@@ -242,11 +256,13 @@ def scorefunction(Input_data,nargout=1):
     #xlswrite_('resultwithoutbias.xlsx',R5,'sheet1','B3:F3')
     #xlswrite_('resultwithoutbias.xlsx',I,'sheet1','G3:G3')
     #xlswrite_('resultwithoutbias.xlsx',H,'sheet1','H3:H3')
-    print 'R5=',R5,"I=",I,'H=',H
+    logger.info('R5=',R5,"I=",I,'H=',H)
     return R5,I,H
 
 if __name__ == '__main__':
-    print  'caculate without bias' 
+    #print  'caculate without bias' 
     input_data=[4.,0.,590.,1125.,12.,2.,0.445,0.1,1.344,42.,12.,21000.,0.0113,95.,95.]
-    scorefunction(input_data)
+    R5,I,H=scorefunction(input_data)
+    result=R5.tolist()[0]+I.tolist()[0]+[H]
+    print "result=",result
 

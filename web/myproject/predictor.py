@@ -3,10 +3,21 @@
 # /usr/local/bin/smop -o GMtest.py GMtest.m
 from __future__ import division
 import numpy as np
-from smop.runtime import *
+#from smop.runtime import zeros_,ones_ 
 from lxml import etree
 from  numpy.linalg.linalg import inv as inv_
 from math import exp as exp_
+
+def ones_(*args,**kwargs):
+    return np.matrix(np.ones(args,dtype="int",**kwargs))
+
+def zeros_(*args,**kwargs):
+    if not args:
+        return 0.0 
+    if len(args) == 1:
+        args += args
+    return np.matrix(np.zeros(args,order="F",**kwargs))
+
 
 def GMtest(data,a,nargout=1,):
     #Shuju1=xlsread_('data2.xlsx','B2:B12')
@@ -41,11 +52,13 @@ def GMtest(data,a,nargout=1,):
         Z[i,0]=0.5 * Y[i,0] + 0.5 * Y[i + 1,0]
     for i in range(0,n - 1):
         X[i,0]=Shuju2[i + 1,0]
-    B[:,0]=Z.T
-    B[:,1]=C.T
+    #B[:,0]=Z.T
+    B[:,0]=np.array(Z.tolist())
+    #B[:,1]=C.T
+    B[:,1]=np.array(C.tolist())
     D=- B
-    print "D:",D
-    print    "1.",D.T.dot( D )
+    #print "D:",D
+    #print    "1.",D.T.dot( D )
     A=inv_(D.T.dot( D)).dot( D.T).dot( X)
     a=A[0,0]
     b=A[1,0]
@@ -78,3 +91,4 @@ if __name__ =='__main__' :
     xml_data= open(filename, 'rb').read()
     predict_datas = handle_transformer_air_data(xml_data)
     print 'predict_data : \n',predict_datas
+
