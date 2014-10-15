@@ -1,72 +1,106 @@
-<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>变压器台账信息</title>
-<link href="static/trans_record.css" rel="stylesheet" type="text/css">
-</head>
+    <head>
+        <meta charset="utf-8" />
+        <title>变压器台账信息</title>
+        <link href="static/trans_record.css" rel="stylesheet" type="text/css"/>
+    </head>
 
-<body>
-  <h2>变压器设备信息</h2>
-   <p>
-  <label for="textfield">设备名称：</label>
-  <input name="trans_factory" type="text" id="trans_factory" value="猇亭变电站#2变压器" readonly>
-  <label for="textfield2">设备型号：</label>
-<input name="trans_type" type="text" id="trans_type" value="SFPSZ9-150000/220" readonly>
-<p/>
- <p>
-  <label for="textfield">制造厂家：</label>
-  <input name="trans_factory" type="text" id="trans_factory" value="沈阳变压器厂" readonly>
-  <label for="textfield2">电压变比：</label>
-<input name="trans_type" type="text" id="trans_type" value="SFPSZ9-150000/220" readonly>
-<p/>
-<p>
-  <label for="textfield">电压等级：</label>
-  <input name="textfield" type="text" id="textfield" value="AC 220kV" readonly>
-  <label for="textfield2">投运日期：</label>  
-  <input name="textfield2" type="text" id="textfield2" value="1999-10-20" readonly>
-  <p/>
-<p>
-  <label for="textfield3">绝缘耐热等级：</label>
-  <input name="textfield3" type="text" id="textfield3" value="A" readonly>
-<label for="textfield4">设备用途：</label>
-<input name="textfield4" type="text" id="textfield4" value="降压变压器" readonly>
-   <p />
-<p>
-<label for="textfield4">额定电压：</label>
-<input name="textfield5" type="text" id="textfield5" value="230kV" readonly>
-   <p />
-<p>
-<label for="textfield8">额定电流：</label>
-<input name="textfield6" type="text" id="textfield6" value="376.5kA" readonly>
-<label for="textfield20">额定容量：</label>
-<input name="textfield7" type="text" id="textfield7" value="150MVA" readonly>
+    <body>
+        <table >
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="textfield">设备名称：</label>
+                                <input name="trans_factory" type="text" id="trans_factory" value="猇亭变电站#2变压器" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield">制造厂家：</label>
+                                <input name="trans_factory" type="text" id="trans_factory" value="沈阳变压器厂" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield">电压等级：</label>
+                                <input name="textfield" type="text" id="textfield" value="AC 220kV" readonly='readonly' />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield3">耐热等级：</label>
+                                <input name="textfield3" type="text" id="textfield3" value="A" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield4">额定电压：</label>
+                                <input name="textfield5" type="text" id="textfield5" value="230kV" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield8">额定电流：</label>
+                                <input name="textfield6" type="text" id="textfield6" value="376.5kA" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield20">额定容量：</label>
+                                <input name="textfield7" type="text" id="textfield7" value="150MVA" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield21">额定频率：</label>
+                                <input name="textfield8" type="text" id="textfield8" value="50hz" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield21">空载损耗：</label>
+                                <input name="textfield8" type="text" id="textfield8" value="88.32kW" readonly='readonly'/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="textfield21">设备型号：</label>
+                                <input name="textfield8" type="text" id="textfield8" value="SFPSZ9-150000/220" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield21">电压变比：</label>
+                                <input name="textfield8" type="text" id="textfield8" value="230±8*1.25%/121/11" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield21">投运日期：</label>
+                                <input name="textfield8" type="text" id="textfield8" value="1999-10-20" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="textfield21">设备用途：</label>
+                                <input name="textfield8" type="text" id="textfield8" value="降压变压器" readonly='readonly'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src='/static/img/2011021503293229.jpg'/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
 
- <p />
-<p>
-<label for="textfield21">额定频率：</label>
-<input name="textfield8" type="text" id="textfield8" value="50hz" readonly>
-<label for="textfield11">空载损耗：</label>
-<input name="textfield8" type="text" id="textfield8" value="88.32kW" readonly>
- <p />
-<p>
-<label for="textfield14">额定电流-中压：</label>
-<input name="textfield8" type="text" id="textfield8" value="715.7kA" readonly>
-<label for="textfield13">额定电流-低压：</label>
-<input name="textfield8" type="text" id="textfield8" value="3936.6kA" readonly>
- <p />
-<p>
-<label for="textfield16">线路阻抗 高压-中压</label>
-<input name="textfield8" type="text" id="textfield8" value="13.5%" readonly>
-<label for="textfield17">线路阻抗 中压-低压</label>
-<input name="textfield8" type="text" id="textfield8" value="7.2%" readonly>
- <p />
-<p>
-<label for="textfield18">线路阻抗 高压-低压</label>
-<input name="textfield8" type="text" id="textfield8" value="22.6%" readonly>
-<label for="textfield19">负载损耗-满载实测</label>
-<input name="textfield8" type="text" id="textfield8" value="500kW" readonly>
-<p />
-
-</body>
+    </body>
 </html>
