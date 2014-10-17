@@ -7,12 +7,16 @@ from graphos.sources.simple import SimpleDataSource
 #from smop.runtime import zeros_,ones_ 
 from myproject.predictor import GMtest
 from myproject.scorefunction import scorefunction
+from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from .forms import UploadFileForm
+from .models import Document
+
 # Create your views here.
 
 import logging
 logger = logging.getLogger(__name__)
 
-logger.debug("scorefunction ???????")
 def home(request):
     #return render_to_response('hello_ext.html',{})
     return render_to_response('index.html',{}) 
@@ -63,10 +67,28 @@ def trans_dc_para(request):
     return render_to_response("chen/trans_dc_para.html",{})
 def trans_estimate(request):
     return render_to_response("chen/trans_estimate.html",{})
+
+@csrf_protect
 def trans_gasdata(request):
-    return render_to_response("chen/trans_gasdata.html",{})
+    return render_to_response("chen/trans_gasdata.html",{},RequestContext(request))
+
 def trans_para(request):
     return render_to_response("chen/trans_para.html",{})
 def trans_record(request):
     return render_to_response("chen/trans_record.html",{})
 
+def handle_uploaded_file(file):
+    xml_file=Document(docfile =file)
+    xml_file.save()
+
+@csrf_protect
+def upload_oil_xml(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['oil_xml_file'])
+            return HttpResponse('success')
+        else:
+            return HttpResponse('invalid form')
+    else:        
+        return HttpResponse('fail')

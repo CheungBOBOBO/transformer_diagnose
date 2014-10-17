@@ -4,7 +4,12 @@
 <meta charset="utf-8">
 <title>油色谱采样数据</title>
 </head>
-
+<script type="text/javascript">
+function formSubmit()
+  {
+  document.getElementById("upload_file").submit()
+  }
+</script>
 <body>
 <div>
 <h2>油色谱采样历史数据</h2>
@@ -14,5 +19,14 @@
 <p>这是放置数据图表显示-横排列</p>
 <p>下方做两个按钮，一个导入数据，一个预测</p>
 </div>
+<table>
+    <tr><td><form id='upload_file' enctype="multipart/form-data" method="POST" action='/upload_oil_xml'>
+            {% csrf_token %}
+            <input type='file' name='oil_xml_file' /><input type='submit' value='提交' />
+        </form></td></tr>
+    <tr><td></td></tr>
+    <tr><td></td></tr>
+</table>
+
 </body>
 </html>

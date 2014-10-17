@@ -1,6 +1,10 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -18,4 +22,5 @@ urlpatterns = patterns('',
     url(r'^trans_gasdata$', 'myproject.views.trans_gasdata', name='trans_gasdata'),
     url(r'^trans_para$', 'myproject.views.trans_para', name='trans_para'),
     url(r'^trans_record$', 'myproject.views.trans_record', name='trans_record'),
-)
+    url(r'^upload_oil_xml$', 'myproject.views.upload_oil_xml', name='trans_record'),
+)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
