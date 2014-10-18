@@ -40,16 +40,27 @@ def oildata(request):
     #return HttpResponse("11");
     return render_to_response('oildata.html',{'chart':chart,})
 
-def get_tend_data(gas):
+def get_gas_data_xml_root():
     doc=Document.objects.first()
     gas_data_xml_path = os.path.join(MEDIA_ROOT ,doc.docfile.name)
     logger.info('gas_data_xml_path = %s'% gas_data_xml_path)
     xml_data= open(gas_data_xml_path, 'rb').read()
-    root=etree.XML(xml_data)
+    return etree.XML(xml_data)
+    
+
+def get_tend_data(gas):
+    root = get_gas_data_xml_root()
     date_list = root.xpath('/Response/ResultValue/DataTable/Rows/Row/ACQUISITIONTIME/text()')
     gas_data_list = root.xpath('/Response/ResultValue/DataTable/Rows/Row/'+gas+'/text()')
     
     return [[ long( time.strftime("%s" , time.strptime( re.sub(r'\.\d+$',r'',date_list[i]) ,'%Y-%m-%dT%H:%M:%S')) )*1000 ,value] for i,value in enumerate(gas_data_list) ]
+
+def get_predict_data(gas):
+    root = get_gas_data_xml_root()
+    gas_data_list = root.xpath('/Response/ResultValue/DataTable/Rows/Row/'+gas+'/text()')
+    logger.info('gas_data_list = %s'% gas_data_list)
+    return [float(gas_data) for gas_data in gas_data_list]
+
 
 def initial_score(request):
     a_list={
@@ -57,7 +68,7 @@ def initial_score(request):
         "C2H2":0.00001,
         "CO":0.00359,
         "CO2":0.00002,
-        "TOTAL_HYDROCARBON":0.00492,
+        "TOTALHYDROCARBON":0.00492,
     }
 
     #data=get_data()
@@ -119,16 +130,16 @@ def get_predict(quest):
         "C2H2":0.00001,
         "CO":0.00359,
         "CO2":0.00002,
-        "TOTAL_HYDROCARBON":0.00492,
+        "TOTALHYDROCARBON":0.00492,
     }
 
     class Predict(object):pass
     data=Predict()
     
     for key,value in a_list.items():
-       Predict.__dict__['predict'+key] =GMtest(get_predict_data(key),a_list[key])
+       data.__dict__['predict_'+key] =GMtest(get_predict_data(key),value)
     
-    return render_to_response("predict.html",{})   
+    return render_to_response("predict.html",{'data':data})   
 
 def get_tend(quest):
     data= [[u'时间',quest.POST["gas"] + u'含量']]

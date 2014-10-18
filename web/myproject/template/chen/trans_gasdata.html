@@ -57,13 +57,19 @@ function get_predict()
                 show_tend(gas,responseText)
             }})(gas_list[i]),'text')
     }
+    $("#predict_title")[0].innerHTML = "数据请求中...";    
+    setTimeout("get_predict_html()",1000)
+}
+
+function get_predict_html()
+{
     $.post("/get_predict",{},function(responseText)
         {
             console.info('get_predict return')
-            show_predict()
+            show_predict(responseText)
         }
     ,"text");
-    $("#predict_title")[0].innerHTML = "<p1>数据请求中...</p1>";    
+    
 }
 
 function show_tend( gas, image_html)
@@ -74,9 +80,10 @@ function show_tend( gas, image_html)
     console.info(image_html)
     $("#"+gas+"_tend_image").html(image_html)
 }
-function show_predict()
+function show_predict(s_html)
 {
-
+    $("#predict_title")[0].innerHTML = "气体预测结果";    
+    $('#predict_data').html(s_html)
 }
 </script>
 <style>
@@ -86,7 +93,7 @@ function show_predict()
 <body>
 <table>
     <tr>
-    <td>
+    <td vAlign='top'>
     <table id='left_body'>
         <tr><td><h2>导入油色谱数据<h2></td></tr>
         <tr>
