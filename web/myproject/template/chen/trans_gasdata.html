@@ -1,32 +1,133 @@
-<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
 <title>油色谱采样数据</title>
 </head>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>  
+<script src="static/js/jquery.flot.js"></script>
+<script src="static/js/jquery.flot.time.js"></script>
 <script type="text/javascript">
-function formSubmit()
-  {
-  document.getElementById("upload_file").submit()
-  }
+//for csrf checking
+jQuery(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+
+function get_predict()
+{
+    var gas_list=['H2','C2H2','CO','CO2','TOTALHYDROCARBON']
+    for(var i=0;i<gas_list.length;++i)
+    {
+        $.post("/get_tend",{'gas':gas_list[i]},(function(gas){
+                return function(responseText)
+            {
+                console.info('get_tend return; i='+i )
+                show_tend(gas,responseText)
+            }})(gas_list[i]),'text')
+    }
+    $.post("/get_predict",{},function(responseText)
+        {
+            console.info('get_predict return')
+            show_predict()
+        }
+    ,"text");
+    $("#predict_title")[0].innerHTML = "<p1>数据请求中...</p1>";    
+}
+
+function show_tend( gas, image_html)
+{
+    console.info("enter show_tend ")
+    image_html=image_html.replace(/line_chart/g,'line_chart_'+gas)
+    image_html=image_html.replace(/"Chart"}/,'"Chart", xaxis:  {mode: "time", timeformat: "%Y/%m/%d", minTickSize: [1, "day"]},"points": {"show": "true"}, }')
+    console.info(image_html)
+    $("#"+gas+"_tend_image").html(image_html)
+}
+function show_predict()
+{
+
+}
 </script>
+<style>
+    tr {text-align:center;}
+    .tend_image > tbody > tr > td {width:800 ; height:400 ; border:black solid 1px;}
+</style>
 <body>
-<div>
-<h2>油色谱采样历史数据</h2>
-<p>读取的xml数据显示</p>
-
-<h2>油色谱采样历史数据趋势图</h2>
-<p>这是放置数据图表显示-横排列</p>
-<p>下方做两个按钮，一个导入数据，一个预测</p>
-</div>
 <table>
-    <tr><td><form id='upload_file' enctype="multipart/form-data" method="POST" action='/upload_oil_xml'>
-            {% csrf_token %}
-            <input type='file' name='oil_xml_file' /><input type='submit' value='提交' />
-        </form></td></tr>
-    <tr><td></td></tr>
-    <tr><td></td></tr>
+    <tr>
+    <td>
+    <table id='left_body'>
+        <tr><td><h2>导入油色谱数据<h2></td></tr>
+        <tr>
+            <td><form id='upload_file' enctype="multipart/form-data" method="POST" action='#'>
+                {% csrf_token %}
+                <input type='file' name='oil_xml_file' /><input type='submit' value='提交' />
+            </form></td>
+        </tr>
+        <tr><td>
+            {% if documents %}
+                <ul>
+                {% for document in documents %}
+                    <li><a href="{{ document.docfile.url }}">{{ document.name }}</a></li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>没有文件</p>
+            {% endif %}
+        </td></tr>
+        <tr><td><input type='button' value='预测油色谱数据' onclick='get_predict()' /></td></tr>
+        <tr><td height='400'>
+            <h2 id='predict_title'>气体预测结果</h2>
+            <table id='predict_data' width='400' ></table>
+        </td></tr>
+    </table>
+    </td>
+    <td>
+        <table class='tend_image' cellspacing='20' id='middle_body'>
+            <tr><td id='H2_tend_image'>氢气含量趋势图</td></tr>
+            <tr><td id='CO_tend_image'>一氧化碳含量趋势图</td></tr>
+            <tr><td id='TOTALHYDROCARBON_tend_image'>总烃含量趋势图</td></tr>
+        </table>
+    </td>
+    <td>
+        <table class='tend_image' cellspacing='20' id='right_body'>
+            <tr><td id='C2H2_tend_image'>乙炔含量趋势图</td></tr>
+            <tr><td id='CO2_tend_image'>二氧化碳含量趋势图</td></tr>
+            <tr ><td style='border: none'></td></tr>
+        </table>
+    </td>
+    </tr>
 </table>
-
 </body>
 </html>

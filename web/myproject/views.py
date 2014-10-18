@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: UTF-8 -*- 
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -11,6 +11,13 @@ from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from .forms import UploadFileForm
 from .models import Document
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+import os
+from transformer_diagnose.settings import MEDIA_ROOT
+from lxml import etree
+import re
+import time
 
 # Create your views here.
 
@@ -33,10 +40,16 @@ def oildata(request):
     #return HttpResponse("11");
     return render_to_response('oildata.html',{'chart':chart,})
 
-def get_data():
-    data={}
-    data["H2"]=[20.6, 1.71, 1.9, 3.1, 4.99, 5.36, 25.01, 4.87, 6.76, 8.91, 5.98 ]
-    return data
+def get_tend_data(gas):
+    doc=Document.objects.first()
+    gas_data_xml_path = os.path.join(MEDIA_ROOT ,doc.docfile.name)
+    logger.info('gas_data_xml_path = %s'% gas_data_xml_path)
+    xml_data= open(gas_data_xml_path, 'rb').read()
+    root=etree.XML(xml_data)
+    date_list = root.xpath('/Response/ResultValue/DataTable/Rows/Row/ACQUISITIONTIME/text()')
+    gas_data_list = root.xpath('/Response/ResultValue/DataTable/Rows/Row/'+gas+'/text()')
+    
+    return [[ long( time.strftime("%s" , time.strptime( re.sub(r'\.\d+$',r'',date_list[i]) ,'%Y-%m-%dT%H:%M:%S')) )*1000 ,value] for i,value in enumerate(gas_data_list) ]
 
 def initial_score(request):
     a_list={
@@ -47,7 +60,9 @@ def initial_score(request):
         "TOTAL_HYDROCARBON":0.00492,
     }
 
-    data=get_data()
+    #data=get_data()
+    data={}
+    data["H2"]=[20.6, 1.71, 1.9, 3.1, 4.99, 5.36, 25.01, 4.87, 6.76, 8.91, 5.98 ]
     predict_data={(key,GMtest(value,a_list[key])) for key,value in data.items() }
 
     input_data=[4.,0.,590.,1125.,12.,2.,0.445,0.1,1.344,42.,12.,21000.,0.0113,95.,95.]
@@ -70,25 +85,53 @@ def trans_estimate(request):
 
 @csrf_protect
 def trans_gasdata(request):
-    return render_to_response("chen/trans_gasdata.html",{},RequestContext(request))
-
-def trans_para(request):
-    return render_to_response("chen/trans_para.html",{})
-def trans_record(request):
-    return render_to_response("chen/trans_record.html",{})
-
-def handle_uploaded_file(file):
-    xml_file=Document(docfile =file)
-    xml_file.save()
-
-@csrf_protect
-def upload_oil_xml(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['oil_xml_file'])
-            return HttpResponse('success')
+            #return HttpResponse('<script>alert("success")</script>')
+            return HttpResponseRedirect(reverse('trans_gasdata'))
         else:
             return HttpResponse('invalid form')
-    else:        
-        return HttpResponse('fail')
+    else:
+        form=UploadFileForm()
+    documents = Document.objects.all()
+    logger.info('documents :%s'%documents)
+    return render_to_response("chen/trans_gasdata.html",{'documents':documents},RequestContext(request))
+
+def trans_para(request):
+    return render_to_response("chen/trans_para.html",{})
+
+
+def trans_record(request):
+    return render_to_response("chen/trans_record.html",{})
+
+def handle_uploaded_file(file):
+    Document.objects.all().delete()
+    xml_file=Document(docfile =file)
+    xml_file.name=file.name
+    xml_file.save()
+
+
+def get_predict(quest):
+    a_list={
+        "H2":0.005609,
+        "C2H2":0.00001,
+        "CO":0.00359,
+        "CO2":0.00002,
+        "TOTAL_HYDROCARBON":0.00492,
+    }
+
+    class Predict(object):pass
+    data=Predict()
+    
+    for key,value in a_list.items():
+       Predict.__dict__['predict'+key] =GMtest(get_predict_data(key),a_list[key])
+    
+    return render_to_response("predict.html",{})   
+
+def get_tend(quest):
+    data= [[u'时间',quest.POST["gas"] + u'含量']]
+    data= data + get_tend_data(quest.POST["gas"])
+    chart = LineChart(SimpleDataSource(data=data), html_id="line_chart")
+    return render_to_response("tend.html",{'chart':chart}) 

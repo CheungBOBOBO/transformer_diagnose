@@ -22,5 +22,6 @@ urlpatterns = patterns('',
     url(r'^trans_gasdata$', 'myproject.views.trans_gasdata', name='trans_gasdata'),
     url(r'^trans_para$', 'myproject.views.trans_para', name='trans_para'),
     url(r'^trans_record$', 'myproject.views.trans_record', name='trans_record'),
-    url(r'^upload_oil_xml$', 'myproject.views.upload_oil_xml', name='trans_record'),
+    url(r'^get_predict$', 'myproject.views.get_predict', name='get_predict'),
+    url(r'^get_tend$', 'myproject.views.get_tend', name='get_tend'),
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
