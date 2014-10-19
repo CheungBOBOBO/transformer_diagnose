@@ -1,86 +1,103 @@
-<!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>上下限阀值参数设定</title>
-<link href="static/threshold.css" rel="stylesheet" type="text/css">
-</head>
-
-<body>
-<div>
-<h2>上下限阀值参数设定</h2>
-<p>
-<label for="downThreshold" id="downLab">下限：</label><label for="upThreshold" id="upLab">上限：</label>
-</p>
-
-  <p>
-  <label for="gas_h2">H2(单位：10^-6μL/L)</label>
-  <input name="gas_h2" type="text" id="gas_h2_down" value="10" >
-<input name="gas_h2" type="text" id="gas_h2_up" value="150" >
-  <p/>
-  <p>
-  <label for="gas_h2">C2H2(单位：10^-6μL/L)</label>
-  <input name="gas_c2h2" type="text" id="gas_c2h2_down" value="0" >
-<input name="gas_c2h2" type="text" id="gas_c2h2_up" value="5" >
-  <p/>
-    <p>
-  <label for="gas_CO">CO(单位：10^-6μL/L)</label>
-  <input name="gas_CO" type="text" id="gas_CO_down" value="0" >
-<input name="gas_CO" type="text" id="gas_CO_up" value="150" >
-  <p/>
-  <p>
-  <label for="gas_CO2">CO2(单位：10^-6μL/L)</label>
-  <input name="gas_CO2" type="text" id="gas_CO2_down" value="0" >
-<input name="gas_CO2" type="text" id="gas_CO2_up" value="4500" >
-  <p/>
-    <p>
-  <label for="gas_sum">总烃(单位：10^-6μL/L)</label>
-  <input name="gas_sum" type="text" id="gas_sum_down" value="10" >
-<input name="gas_sum" type="text" id="gas_sum_up" value="150" >
-  <p/>
-
-<p>
-  <label for="jyxsb">绝缘吸收比(单位：%)</label>
-  <input name="jyxsb" type="text" id="jyxsb_down" value="1" >
-<input name="jyxsb" type="text" id="jyxsb_up" value="1.3" >
-  <p/>
-  <p>
-  <label for="rzjzshys">绕组介质损耗因数(单位：%)</label>
-  <input name="rzjzshys" type="text" id="rzjzshys_down" value="0.5" >
-<input name="rzjzshys" type="text" id="rzjzshys_up" value="0.8" >
-  <p/>
-  <p>
-  <label for="yjzshys">油介质损耗因数(单位：%)</label>
-  <input name="yjzshys" type="text" id="yjzshys_down" value="0" >
-<input name="yjzshys" type="text" id="yjzshys_up" value="4" >
-  <p/>
-  <p>
-  <label for="rzzldzxjc">绕组直流电阻相间差(单位：%)</label>
-  <input name="rzzldzxjc" type="text" id="rzzldzxjc_down" value="1" >
-<input name="rzzldzxjc" type="text" id="rzzldzxjc_up" value="2" >
-  <p/>
-  <p>
-  <label for="yjcdy">油击穿电压(单位：kV)</label>
-  <input name="yjcdy" type="text" id="yjcdy_down" value="0" >
-<input name="yjcdy" type="text" id="yjcdy_up" value="35" >
-  <p/>
-  <p>
-  <label for="yzwshl">油中微水含量(单位：mg/L)</label>
-  <input name="yzwshl" type="text" id="yzwshl_down" value="10" >
-<input name="yzwshl" type="text" id="yzwshl_up" value="150" >
-  <p/>
-  <p>
-  <label for="tgzpjydz">套管主屏绝缘电阻(单位：MΩ)</label>
-  <input name="tgzpjydz" type="text" id="tgzpjydz_down" value="10000" >
-<input name="tgzpjydz" type="text" id="tgzpjydz_up" value="20000" >
-  <p/>
-  <p>
-  <label for="txjddl">铁芯接地电流(单位：A)</label>
-  <input name="txjddl" type="text" id="txjddl_down" value="0.1" >
-<input name="txjddl" type="text" id="txjddl_up" value="0.4" >
-  <p/>
-
-
-</div>
-</body>
+    <head>
+        <meta charset="utf-8"/>
+        <title>上下限阀值参数设定</title>
+        <link href="static/threshold.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <form id='threshold_form' action='POST' >
+        <table>
+            <tr>
+                <td>
+                    <table class='semi'>
+                        <tr>
+                            <td></td>
+                            <td><label for="downThreshold" id="downLab">下限值</label></td>
+                            <td><label for="upThreshold" id="upLab">上限值</label></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gas_h2">氢气(单位：10^-6μL/L)</label></td>
+                            <td><input name="gas_h2" type="text" id="gas_h2_down" value="10" /></td>
+                            <td><input name="gas_h2" type="text" id="gas_h2_up" value="150" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gas_h2">乙炔(单位：10^-6μL/L)</label></td>
+                            <td><input name="gas_c2h2" type="text" id="gas_c2h2_down" value="0" /></td>
+                            <td><input name="gas_c2h2" type="text" id="gas_c2h2_up" value="5" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gas_h2">一氧化碳(单位：10^-6μL/L)</label></td>
+                            <td><input name="gas_CO" type="text" id="gas_CO_down" value="0" /></td>
+                            <td><input name="gas_CO" type="text" id="gas_CO_up" value="150" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gas_h2">二氧化碳(单位：10^-6μL/L)</label></td>
+                            <td><input name="gas_CO2" type="text" id="gas_CO2_down" value="0" /></td>
+                            <td><input name="gas_CO2" type="text" id="gas_CO2_up" value="4500" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="gas_sum">总烃(单位：10^-6μL/L)</label></td>
+                            <td><input name="gas_sum" type="text" id="gas_sum_down" value="10" /></td>
+                            <td><input name="gas_sum" type="text" id="gas_sum_up" value="150" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="jyxsb">绝缘吸收比(单位：%)</label></td>
+                            <td><input name="jyxsb" type="text" id="jyxsb_down" value="1" /></td>
+                            <td><input name="jyxsb" type="text" id="jyxsb_up" value="1.3" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="jyxsb">绕组介质损耗(单位：%)</label></td>
+                            <td><input name="rzjzshys" type="text" id="rzjzshys_down" value="0.5" /></td>
+                            <td><input name="rzjzshys" type="text" id="rzjzshys_up" value="0.8" /></td>
+                        </tr>
+                    </table>
+                </td>
+                <td vAlign='top'>
+                    <table class='semi'>
+                        <tr>
+                            <td></td>
+                            <td><label for="downThreshold" id="downLab">下限值</label></td>
+                            <td><label for="upThreshold" id="upLab">上限值</label></td>
+                        </tr>
+                        <tr>
+                            <td><label for="yjcdy">油击穿电压(单位：kV)</label></td>
+                            <td><input name="yjcdy" type="text" id="yjcdy_down" value="0" /></td>
+                            <td><input name="yjcdy" type="text" id="yjcdy_up" value="35" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="yzwshl">油中微水含量(单位：mg/L)</label></td>
+                            <td><input name="yzwshl" type="text" id="yzwshl_down" value="10" /></td>
+                            <td><input name="yzwshl" type="text" id="yzwshl_up" value="150" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="tgzpjydz">套管主屏绝缘电阻(单位：MΩ)</label></td>
+                            <td><input name="tgzpjydz" type="text" id="tgzpjydz_down" value="10000" /></td>
+                            <td><input name="tgzpjydz" type="text" id="tgzpjydz_up" value="20000" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="txjddl">铁芯接地电流(单位：A)</label></td>
+                            <td><input name="txjddl" type="text" id="txjddl_down" value="0.1" /></td>
+                            <td><input name="txjddl" type="text" id="txjddl_up" value="0.4" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="yjzshys">油介质损耗因数(单位：%)</label></td>
+                            <td><input name="yjzshys" type="text" id="yjzshys_down" value="0" /></td>
+                            <td><input name="yjzshys" type="text" id="yjzshys_up" value="4" /></td>
+                        </tr>
+                        <tr>
+                            <td><label for="rzzldzxjc">绕组直流电阻相间差(单位：%)</label></td>
+                            <td><input name="rzzldzxjc" type="text" id="rzzldzxjc_down" value="1" /></td>
+                            <td><input name="jyxsb" type="text" id="jyxsb_up" value="1.3" /></td>
+                        </tr>
+                    </table>
+                
+                </td>
+            </tr>
+            <tr>
+                <td align='right'><input type='button' value='确认修改'/></td>
+                <td align='right'><input type='button' value='取消'/></td>
+            </tr>
+        </table>
+        </form>
+    </body>
 </html>

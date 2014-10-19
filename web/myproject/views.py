@@ -146,3 +146,6 @@ def get_tend(quest):
     data= data + get_tend_data(quest.POST["gas"])
     chart = LineChart(SimpleDataSource(data=data), html_id="line_chart")
     return render_to_response("tend.html",{'chart':chart}) 
+
+def score_info(quest):
+    return render_to_response("score_info.html",{})   

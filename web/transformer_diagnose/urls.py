@@ -24,4 +24,5 @@ urlpatterns = patterns('',
     url(r'^trans_record$', 'myproject.views.trans_record', name='trans_record'),
     url(r'^get_predict$', 'myproject.views.get_predict', name='get_predict'),
     url(r'^get_tend$', 'myproject.views.get_tend', name='get_tend'),
+    url(r'^score_info$', 'myproject.views.score_info', name='score_info'),
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
