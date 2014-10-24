@@ -9,11 +9,58 @@
 <body>
 <div>
 <h2>变压器健康状态评估</h2>
-此处添加一按钮，计算各状态得分，
-输出四组结果：历史状态，当前状态，预测状态，不考虑直流偏磁
-数字显示和图表显示。
-
-
+<table>
+<tr><td>
+<table cellspacing='20' cellpadding='10' border="0" style=" border:1px solid #000000;">
+    <tr><td style='border:1px solid black' align='center'><h4>不计及直流偏磁评分</h4></td></tr>
+    <tr>
+        <td>历史状态评分 <input type=text value='' size=5 readonly='readonly'/></td>
+        <td>当前状态评分 <input type=text value='' size=5 readonly='readonly'/></td>
+        <td>预测状态评分 <input type=text value='' size=5 readonly='readonly'/></td>
+    </tr>
+</table>
+</td></tr><tr><td>
+<br/>
+<br/>
+<table cellspacing='20' cellpadding='10' border="0" style=" border:1px solid #000000;">
+    <tr>
+        <td>直流偏磁电流大小(A)</td>
+        <td><input type=text value='10' readonly='readonly'/></td>
+        <td><input type=text value='确认修改' readonly='readonly'/></td>
+    </tr>
+    <tr>
+        <td>直流偏磁持续时间(小时)</td>
+        <td><input type=text value='150' readonly='readonly'/></td>
+        <td><input type=text value='取消' readonly='readonly'/></td>
+    </tr>
+</table>
+</td></tr><tr><td>
+<br/>
+<br/>
+<table cellspacing='20' cellpadding='10' border="0" style=" border:1px solid #000000;" >
+    <tr>
+        <td rowspan='3' style='border:1px solid black'><h4>计及直流偏磁评分</h4></td>
+        <td>直流偏磁下油温升</td>
+        <td><input size=10 type='text' /></td>
+        <td>检修策略</td>
+    </tr>
+    <tr>
+        <td>直流偏磁评分</td>
+        <td><input size=10 type='text' /></td>
+        <td rowspan=2 style='border:1px solid black'></td>
+    </tr>
+    <tr>
+        <td>综合评分</td>
+        <td><input size=10 type='text' /></td>
+    </tr>
+</table>
+<br/>
+<br/>
+</td></tr><tr>
+    <td style='border:1px solid black' height=100></td>
+    <td vAlign='bottom'><input value='导出诊断报告' type='text'/></td>
+</tr>
+</table>
 </div>
 </body>
 </html>
